@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Your Todos · Todo App{% endblock %}
+{% block content %}
+  <section class="card">
+    <h1>Your todos</h1>
+    <form class="form inline" method="post" action="{{ url_for('add_todo') }}">
+      <input type="text" name="title" placeholder="Add a new todo..." required />
+      <button class="btn primary" type="submit">Add</button>
+    </form>
+
+    {% if todos %}
+      <ul class="todo-list">
+        {% for todo in todos %}
+          <li class="todo-item {% if todo.completed %}completed{% endif %}">
+            <form method="post" action="{{ url_for('toggle_todo', todo_id=todo.id) }}">
+              <button class="toggle" title="Toggle complete" aria-label="Toggle complete">{% if todo.completed %}☑{% else %}☐{% endif %}</button>
+            </form>
+            <span class="title">{{ todo.title }}</span>
+            <form method="post" action="{{ url_for('delete_todo', todo_id=todo.id) }}">
+              <button class="delete" title="Delete" aria-label="Delete">✕</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No todos yet. Add your first above.</p>
+    {% endif %}
+  </section>
+{% endblock %}
